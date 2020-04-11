@@ -1,7 +1,10 @@
-"""Some helpful methods for making games."""
+"""Some useful functions methods for making text-based games."""
 
+import os
 import time
 import random
+import termios
+import sys
 
 class colors:
     """Colors class."""
@@ -14,7 +17,6 @@ class colors:
     reverse='\033[07m'
     invisible='\033[08m'
     strikethrough='\033[09m'
-
 
     class fg:
         """Foreground color class."""
@@ -53,32 +55,52 @@ def print_pause(text, color=colors.reset, length=1,):
     Default wait time 1 second.
     Too print bold red use: colors.fg.red + colors.bold.
     """
+    termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+    os.system("stty echo")
     print(f"{color}" + text + colors.reset)
+    os.system("stty -echo")
     time.sleep(length)
 
 
 def valid_input(prompt, options, tryagain):
-    """Validate user input."""
+    """
+    Validate user input.
+
+    Requires a promt, a list of valid options, and a message for invalid
+    """
     while True:
         response = input(prompt).lower()
         for option in options:
             if option in response:
                 return response
-        print_pause(f"{tryagain}", 1)
+        print_pause(f"{tryagain}",colors.fg.red, 1)
 
 
 def replay():
     """Prompt player to play again."""
-    choice = valid_input("\nWould you like to play again? y/n\n", ["y", "n"])
+    choice = valid_input("\nWould you like to play again? y/n\n", ["y", "n"], "Please select 'y' or 'n'")
     yes_list = ["Yeehaw!", "Oh no not again!", "Lets do this!",
-                "One more turn!", "Why does this keep happening to me?"]
+                "One more!", "Why does this keep happening to me?"]
     if choice == "y":
-        print_pause(random.choice(yes_list), 3)
+        print_pause(random.choice(yes_list), colors.fg.blue, 3)
         play_game()
     elif choice == "n":
-        print_pause("Get me out of here!", 1)
-        print_pause("Thanks for playing!", 1)
+        print_pause("Get me out of here!", colors.fg.red, 1)
+        print_pause("Thanks for playing!", colors.fg.green, 1)
         sys.exit()
 
-
-print_pause("hello",colors.fg.red + colors.bold)
+def choose_direction(directions, destinations, inventory):
+    """Print inventory and choose a diriection to go."""
+    print_pause("\nInventory:", 0)
+    print_pause(inventory, colors.bg.black + colors.fg.yellow, .5)
+    response = valid_input("\nWhich way would you "
+                           "like to go? N/S/E/W:  ", directions,
+                           "Please N,S,E, or W").lower()
+    if response == "n":
+        return destinations[0](inventory)
+    elif response == "s":
+        return destinations[1](inventory)
+    elif response == "e":
+        return destinations[2](inventory)
+    elif response == "w":
+        return destinations[3](inventory)

@@ -1,5 +1,5 @@
 # Game Modules
-A collection of useful functions for games.
+A collection of useful functions and methods for making text-based games.
 
 ## Built With
 
