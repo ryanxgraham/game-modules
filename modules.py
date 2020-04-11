@@ -89,18 +89,31 @@ def replay():
         print_pause("Thanks for playing!", colors.fg.green, 1)
         sys.exit()
 
-def choose_direction(directions, destinations, inventory):
-    """Print inventory and choose a diriection to go."""
-    print_pause("\nInventory:", 0)
-    print_pause(inventory, colors.bg.black + colors.fg.yellow, .5)
-    response = valid_input("\nWhich way would you "
-                           "like to go? N/S/E/W:  ", directions,
-                           "Please N,S,E, or W").lower()
-    if response == "n":
-        return destinations[0](inventory)
-    elif response == "s":
-        return destinations[1](inventory)
-    elif response == "e":
-        return destinations[2](inventory)
-    elif response == "w":
-        return destinations[3](inventory)
+class Zone:
+    """Parent class for Zones."""
+
+    def __init__(self, name, description, weather, directions, destinations,
+    inventory):
+        """Initialize Zone Class."""
+        self.name = name
+        self.description = description
+        self.weather = weather
+        self.directions = directions
+        self.destinations = destinations
+        self.inventory = inventory
+
+    def choose_direction(directions, destinations, inventory):
+        """Print inventory and choose a diriection to go."""
+        print_pause("\nInventory:", 0)
+        print_pause(inventory, colors.bg.black + colors.fg.yellow, .5)
+        response = valid_input("\nWhich way would you "
+                               "like to go? N/S/E/W:  ", directions,
+                               "Please N,S,E, or W").lower()
+        if response == "n":
+            return destinations[0](inventory)
+        elif response == "s":
+            return destinations[1](inventory)
+        elif response == "e":
+            return destinations[2](inventory)
+        elif response == "w":
+            return destinations[3](inventory)
