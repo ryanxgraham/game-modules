@@ -92,15 +92,14 @@ def replay():
 class Zone:
     """Parent class for Zones."""
 
-    def __init__(self, name, description, weather, directions, destinations,
-    inventory):
+    def __init__(self, name, description, directions, destinations, inventory):
         """Initialize Zone Class."""
         self.name = name
         self.description = description
-        self.weather = weather
         self.directions = directions
         self.destinations = destinations
         self.inventory = inventory
+        self.move_count = 0
 
     def choose_direction(directions, destinations, inventory):
         """Print inventory and choose a diriection to go."""
@@ -109,6 +108,7 @@ class Zone:
         response = valid_input("\nWhich way would you "
                                "like to go? N/S/E/W:  ", directions,
                                "Please N,S,E, or W").lower()
+        self.move_count += 1
         if response == "n":
             return destinations[0](inventory)
         elif response == "s":
