@@ -53,7 +53,7 @@ def print_pause(text, color=colors.reset, length=1,):
     Print a string of a certtain color and wait a certain amount of time.
 
     Default wait time 1 second.
-    Too print bold red use: colors.fg.red + colors.bold.
+    To print bold red use: colors.fg.red + colors.bold.
     """
     termios.tcflush(sys.stdin, termios.TCIOFLUSH)
     os.system("stty echo")
